@@ -48,3 +48,7 @@ android {
 flutter {
     source '../..'
 }
+configurations {
+    cleanedAnnotations
+    compile.exclude group: 'org.jetbrains', module: 'annotations'
+}

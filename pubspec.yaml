@@ -1,7 +1,8 @@
 name: storage_access_framework
 description: Wrapper for Android Storage Access Framework
 version: 0.0.1
-homepage:
+author: Dewmina
+homepage: https://github.com/DewminaUdayashan/storage_access_framework
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

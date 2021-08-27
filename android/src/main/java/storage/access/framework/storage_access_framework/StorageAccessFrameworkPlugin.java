@@ -8,7 +8,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -73,7 +72,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     }
 
     @Override
-    public void onAttachedToActivity(@NonNull @org.jetbrains.annotations.NotNull ActivityPluginBinding binding) {
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
         docTree = new DocTree(activity);
         Log.d(TAG, "onAttachedToActivity: ");
@@ -87,7 +86,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     }
 
     @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull @org.jetbrains.annotations.NotNull ActivityPluginBinding binding) {
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
         docTree.activity = binding.getActivity();
 

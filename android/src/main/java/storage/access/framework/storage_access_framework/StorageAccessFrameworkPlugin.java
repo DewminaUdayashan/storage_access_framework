@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+
 import androidx.annotation.NonNull;
 
 import java.util.Map;
@@ -19,29 +20,32 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
+import storage.access.framework.storage_access_framework.image.Image;
 import storage.access.framework.storage_access_framework.utils.DocTree;
 import storage.access.framework.storage_access_framework.utils.PlatformInfo;
+
+import static io.flutter.plugin.common.PluginRegistry.*;
 
 /**
  * StorageAccessFrameworkPlugin
  */
-public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
+public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware, ActivityResultListener {
     private MethodChannel channel;
     private Activity activity;
-    public static DocTree docTree;
+    private DocTree docTree;
+    private Result result;
     final private static String TAG = "SAF PLUGIN => ";
 
 
     @Override
     public void onAttachedToEngine(FlutterPluginBinding flutterPluginBinding) {
-//        plugin = new StorageAccessFrameworkPlugin();
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "storage_access_framework");
         channel.setMethodCallHandler(this);
     }
 
-
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+        this.result = result;
         try {
 //            final String whatsAppUri = arg.get("wa");
 //            final String whatsApp4BUri = arg.get("wa4b");
@@ -55,8 +59,12 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     break;
                 case "openDocumentTree":
                     Log.d(TAG, "onMethodCall: OPEN DOC TREE CALLED");
-                    final String openDocTreeInitialUri = arg.get("initialUri");
-                    docTree.openDocTree(openDocTreeInitialUri);
+                    try {
+                        final String openDocTreeInitialUri = arg.get("initialUri");
+                        docTree.openDocTree(openDocTreeInitialUri);
+                    } catch (Exception e) {
+                        docTree.openDocTree(null);
+                    }
                     break;
                 case "checkPermissionForUri":
                     Log.d(TAG, "onMethodCall: Checking Uri Permission");
@@ -69,6 +77,10 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                         }
                     }
                     break;
+                case "getImages":
+                    final String path = arg.get("imagePath");
+                    result.success(Image.getImages(path, activity));
+                    break;
                 default:
                     result.notImplemented();
                     break;
@@ -80,7 +92,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 
 
     @Override
-    public void onDetachedFromEngine(FlutterPluginBinding binding) {
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
     }
 
@@ -89,6 +101,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
         activity = binding.getActivity();
         docTree = new DocTree(activity);
         Log.d(TAG, "onAttachedToActivity: ");
+        binding.addActivityResultListener(this);
     }
 
     @Override
@@ -103,7 +116,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
         activity = binding.getActivity();
         docTree.activity = binding.getActivity();
-
+        binding.addActivityResultListener(this);
         Log.d(TAG, "onReattachedToActivityForConfigChanges: ");
     }
 
@@ -117,19 +130,17 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: ");
         if (requestCode == DocTree.REQUEST_PERMISSION_CODE && resultCode == Activity.RESULT_OK) {
             Log.d(TAG, "onActivityResult: SELECTED DIR => " + data.getData().getPath());
+            result.success(data.getData().getPath());
             docTree.saveDir(data.getData());
             return true;
         } else if (requestCode == DocTree.REQUEST_PERMISSION_CODE && resultCode == Activity.RESULT_CANCELED) {
             Log.d(TAG, "onActivityResult: CANCELLED CHOOSING");
+            result.success(null);
             return true;
-        } else if (requestCode == 100) {
-            Log.d(TAG, "onActivityResult: REQUEST CODE 100 WITH START TO ON ACTIVITY RESULT");
         }
         return false;
-
     }
 
 

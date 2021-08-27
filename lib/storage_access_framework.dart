@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class StorageAccessFramework {
@@ -9,13 +9,15 @@ class StorageAccessFramework {
   static const String _getPlatformVersion = 'getPlatformVersion';
   static const String _openDocumentTree = 'openDocumentTree';
   static const String _checkPermissionForUri = 'checkPermissionForUri';
+  static const String _getImages = 'getImages';
 
   static Future<int?> get platformVersion async {
     final int? version = await _channel.invokeMethod(_getPlatformVersion);
     return version;
   }
 
-  static Future<void> openDocumentTree({String? initialUri}) async {
+  static Future<Uri?> openDocumentTree({String? initialUri}) async {
+    Uri? uri;
     String url = '';
     if (initialUri != null) {
       url += 'content://com.android.externalstorage.documents/document/';
@@ -25,10 +27,29 @@ class StorageAccessFramework {
       'initialUri': url,
     };
     if (initialUri != null) {
-      await _channel.invokeMethod(_openDocumentTree, payload);
+      uri = Uri.directory(
+          await _channel.invokeMethod(_openDocumentTree, payload));
     } else {
-      await _channel.invokeMethod(_openDocumentTree);
+      uri = await _channel.invokeMethod(_openDocumentTree);
     }
+    return uri;
+  }
+
+  static Future<List<Uint8List>> getImages({required String uri}) async {
+    List<Uint8List> list = List<Uint8List>.empty(growable: true);
+    String url = '';
+    url += 'content://com.android.externalstorage.documents/tree/';
+    url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
+    print(url);
+    Map<String, dynamic> payload = <String, dynamic>{
+      'imagePath': url,
+    };
+    final res = await _channel.invokeMethod(_getImages, payload);
+    res.map((imgBytes) {
+      list.add(Uint8List.fromList(imgBytes));
+      print(list.length);
+    }).toList();
+    return list;
   }
 
   static Future<bool> isPermissionAvailableForUri({required String uri}) async {

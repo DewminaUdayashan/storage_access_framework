@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -64,10 +67,18 @@ class _HomeState extends State<Home> {
             ),
             TextButton(
               onPressed: () async {
-                await StorageAccessFramework.openDocumentTree(
-                  initialUri:
-                      "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
-                );
+                try {
+                  Uri? uri = await StorageAccessFramework.openDocumentTree(
+                      // initialUri:
+                      //     "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
+                      );
+                  if (uri != null) if (uri.path ==
+                      "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses") {
+                    print('Path Selected Correctly');
+                  }
+                } catch (e) {
+                  print(e);
+                }
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -96,7 +107,30 @@ class _HomeState extends State<Home> {
                 backgroundColor: Colors.green,
               ),
               child: Text(
-                'Open Document Tree',
+                'Check Permission',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                await StorageAccessFramework.getImages(
+                  uri:
+                      "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
+                ).then((value) {
+                  showDialog(
+                      context: context,
+                      builder: (c) => AlertDialog(
+                            title: Text("Images Loaded"),
+                            content: Text(value.length.toString()),
+                            actions: [],
+                          ));
+                });
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              child: Text(
+                'Load Images',
                 style: TextStyle(color: Colors.white70),
               ),
             ),

@@ -27,9 +27,14 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
+implementation 'androidx.documentfile:documentfile:1.0.1'
 }
 configurations {
     cleanedAnnotations

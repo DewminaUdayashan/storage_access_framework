@@ -56,9 +56,9 @@ public class DocTree {
 //        }
     }
 
+    boolean isPermissionExist = false;
 
     public void saveDir(Uri uri) {
-        boolean isPermissionExist = false;
         Log.d(TAG, "saveDir: LOOKING FOR DIRECTORY TREE");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             List<UriPermission> existing = loadSavedDir();
@@ -85,5 +85,17 @@ public class DocTree {
         else return null;
     }
 
+
+    public boolean checkPermissionForUri(Uri uri) {
+        List<UriPermission> permissions = loadSavedDir();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            for (UriPermission permission : permissions) {
+                if (permission.getUri().equals(uri)) {
+                    Log.d(TAG, "checkPermissionForUri: Permission Exist");
+                    return true;
+                }
+            }
+        return false;
+    }
 
 }

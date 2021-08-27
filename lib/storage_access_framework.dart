@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class StorageAccessFramework {
@@ -7,6 +8,7 @@ class StorageAccessFramework {
       const MethodChannel('storage_access_framework');
   static const String _getPlatformVersion = 'getPlatformVersion';
   static const String _openDocumentTree = 'openDocumentTree';
+  static const String _checkPermissionForUri = 'checkPermissionForUri';
 
   static Future<int?> get platformVersion async {
     final int? version = await _channel.invokeMethod(_getPlatformVersion);
@@ -27,5 +29,19 @@ class StorageAccessFramework {
     } else {
       await _channel.invokeMethod(_openDocumentTree);
     }
+  }
+
+  static Future<bool> isPermissionAvailableForUri({required String uri}) async {
+    String url = '';
+    url += 'content://com.android.externalstorage.documents/tree/';
+    url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
+
+    Map<String, dynamic> payload = <String, dynamic>{
+      'checkPermissionFor': url,
+    };
+    bool isGranted =
+        await _channel.invokeMethod(_checkPermissionForUri, payload);
+    print("PERMISSION STATUS => $isGranted");
+    return isGranted;
   }
 }

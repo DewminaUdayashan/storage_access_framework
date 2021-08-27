@@ -3,6 +3,7 @@ package storage.access.framework.storage_access_framework;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.UriPermission;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -46,20 +47,31 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 //            final String whatsApp4BUri = arg.get("wa4b");
 //            final String whatsAppDualUri = arg.get("waDual");
 //            final String whatsAppGBUri = arg.get("waGB");
-            if (call.method.equals("getPlatformVersion")) {
-                result.success(PlatformInfo.getPlatformVersion());
-            } else if (call.method.equals("openDocumentTree")) {
-                Log.d(TAG, "onMethodCall: OPEN DOC TREE CALLED");
-                final Map<String, String> arg = call.arguments();
-                final String openDocTreeInitialUri = arg.get("initialUri");
-                docTree.openDocTree(openDocTreeInitialUri);
-                for (UriPermission permission : docTree.loadSavedDir()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        Log.d(TAG, "onMethodCall: permission => " + permission.getUri().getPath());
+            final Map<String, String> arg = call.arguments();
+
+            switch (call.method) {
+                case "getPlatformVersion":
+                    result.success(PlatformInfo.getPlatformVersion());
+                    break;
+                case "openDocumentTree":
+                    Log.d(TAG, "onMethodCall: OPEN DOC TREE CALLED");
+                    final String openDocTreeInitialUri = arg.get("initialUri");
+                    docTree.openDocTree(openDocTreeInitialUri);
+                    break;
+                case "checkPermissionForUri":
+                    Log.d(TAG, "onMethodCall: Checking Uri Permission");
+                    final String checkPermissionForUri = arg.get("checkPermissionFor");
+                    result.success(docTree.checkPermissionForUri(Uri.parse(checkPermissionForUri)));
+                    Log.d(TAG, "onMethodCall: permission requested " + Uri.parse(checkPermissionForUri).getPath());
+                    for (UriPermission permission : docTree.loadSavedDir()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            Log.d(TAG, "onMethodCall: permission " + permission.getUri());
+                        }
                     }
-                }
-            } else {
-                result.notImplemented();
+                    break;
+                default:
+                    result.notImplemented();
+                    break;
             }
         } catch (Exception e) {
             Log.d(TAG, "onMethodCall: MAP EMPTY " + e.getMessage());

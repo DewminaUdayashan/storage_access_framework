@@ -8,12 +8,24 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SAF',
+      home: Home(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   String _platformVersion = 'Unknown';
 
   @override
@@ -56,6 +68,29 @@ class _MyAppState extends State<MyApp> {
                   initialUri:
                       "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
                 );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              child: Text(
+                'Open Document Tree',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (await StorageAccessFramework.isPermissionAvailableForUri(
+                  uri:
+                      "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
+                )) {
+                  showDialog(
+                      context: context,
+                      builder: (c) => AlertDialog(
+                            title: Text("Permission Available"),
+                            content: Text("This is my message."),
+                            actions: [],
+                          ));
+                }
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,

@@ -49,6 +49,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
             if (call.method.equals("getPlatformVersion")) {
                 result.success(PlatformInfo.getPlatformVersion());
             } else if (call.method.equals("openDocumentTree")) {
+                Log.d(TAG, "onMethodCall: OPEN DOC TREE CALLED");
                 final Map<String, String> arg = call.arguments();
                 final String openDocTreeInitialUri = arg.get("initialUri");
                 docTree.openDocTree(openDocTreeInitialUri);

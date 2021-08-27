@@ -32,7 +32,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 
 
     @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+    public void onAttachedToEngine(FlutterPluginBinding flutterPluginBinding) {
 //        plugin = new StorageAccessFrameworkPlugin();
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "storage_access_framework");
         channel.setMethodCallHandler(this);
@@ -40,7 +40,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+    public void onMethodCall(MethodCall call, Result result) {
         try {
 //            final String whatsAppUri = arg.get("wa");
 //            final String whatsApp4BUri = arg.get("wa4b");
@@ -67,12 +67,12 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 
 
     @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    public void onDetachedFromEngine(FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
     }
 
     @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+    public void onAttachedToActivity(ActivityPluginBinding binding) {
         activity = binding.getActivity();
         docTree = new DocTree(activity);
         Log.d(TAG, "onAttachedToActivity: ");
@@ -85,8 +85,9 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
         Log.d(TAG, "onDetachedFromActivityForConfigChanges: ");
     }
 
+
     @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
         activity = binding.getActivity();
         docTree.activity = binding.getActivity();
 

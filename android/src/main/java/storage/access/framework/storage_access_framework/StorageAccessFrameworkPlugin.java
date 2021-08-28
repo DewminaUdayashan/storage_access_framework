@@ -141,7 +141,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
             return true;
         } else if (requestCode == DocTree.REQUEST_PERMISSION_CODE && resultCode == Activity.RESULT_CANCELED) {
             Log.d(TAG, "onActivityResult: CANCELLED CHOOSING");
-            result.success(null);
+            result.success("dirNoChoosed");
             return true;
         }
         return false;

@@ -48,7 +48,6 @@ class StorageAccessFramework {
     String url = '';
     url += 'content://com.android.externalstorage.documents/tree/';
     url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
-    print(url);
     Map<String, dynamic> payload = <String, dynamic>{
       'imagePath': url,
     };
@@ -57,6 +56,7 @@ class StorageAccessFramework {
       list.add(Uint8List.fromList(imgBytes));
       print(list.length);
     }).toList();
+    print('IMAGES RECEIVED FOR FLUTTER SIDE ${list.length}');
     return list;
   }
 

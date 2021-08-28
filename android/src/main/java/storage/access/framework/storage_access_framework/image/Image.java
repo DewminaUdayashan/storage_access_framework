@@ -32,7 +32,7 @@ public class Image {
             for (DocumentFile file : files) {
                 Log.d(TAG, "getImages: Image => " + file.getName());
                 try {
-                    if (Objects.requireNonNull(file.getName()).contains(".jpg")) {
+                    if (file.getName().contains(".jpg")) {
                         InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                         byte[] inputData = getBytes(iStream);
                         Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));

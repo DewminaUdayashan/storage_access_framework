@@ -11,6 +11,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -44,10 +45,20 @@ public class Image {
                 try {
                     if (types.isEmpty()) {
                         Log.d(TAG, "getImages: FILE EXTENSIONS EMPTY");
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            images.add(Files.readAllBytes(Paths.get(String.valueOf(file.getUri()))));
-                        }
+                        InputStream inputStream = context.getContentResolver().openInputStream(file.getUri());
+                        BufferedInputStream bis = new BufferedInputStream(inputStream);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
+                        byte buffer[] = new byte[1024];
+                        int len;
+                        while ((len = bis.read(buffer, 0, buffer.length)) > 0) {
+                            baos.write(buffer, 0, len);
+                        }
+                        bis.close();
+
+                        byte[] imageData = baos.toByteArray();
+                        baos.close();
+                        images.add(imageData);
 //                        InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
 //                        byte[] inputData = getBytes(iStream, file.length());
 //                        Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
@@ -57,15 +68,26 @@ public class Image {
                         for (String type : types) {
                             Log.d(TAG, "getImages: FILE EXTENSION => " + type);
                             if (Objects.requireNonNull(file.getName()).contains(type)) {
-                                InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    Log.d(TAG, "getImages: Uri =====>" + file.getUri());
-                                    Log.d(TAG, "getImages: Path ====>" + file.getUri().getPath());
-                                    images.add(FileUtils.readFileToByteArray(new File("/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses/i8.jpg")));
-                                }
+//                                InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
 //                                byte[] inputData = getBytes(iStream, file.length());
 //                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
 //                                images.add(inputData);
+
+                                InputStream inputStream = context.getContentResolver().openInputStream(file.getUri());
+                                BufferedInputStream bis = new BufferedInputStream(inputStream);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                                byte buffer[] = new byte[1024];
+                                int len;
+                                while ((len = bis.read(buffer, 0, buffer.length)) > 0) {
+                                    baos.write(buffer, 0, len);
+                                }
+                                bis.close();
+
+                                byte[] imageData = baos.toByteArray();
+                                baos.close();
+                                images.add(imageData);
+
                             }
                         }
                     }

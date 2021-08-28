@@ -61,7 +61,7 @@ public class Image {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     Log.d(TAG, "getImages: Uri =====>" + file.getUri());
                                     Log.d(TAG, "getImages: Path ====>" + file.getUri().getPath());
-                                    images.add(FileUtils.readFileToByteArray(new File(file.getUri().getPath())));
+                                    images.add(FileUtils.readFileToByteArray(new File("/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses/i8.jpg")));
                                 }
 //                                byte[] inputData = getBytes(iStream, file.length());
 //                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));

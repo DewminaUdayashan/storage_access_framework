@@ -90,9 +90,11 @@ public class DocTree {
 
 
     public boolean checkPermissionForUri(Uri uri) {
+        Log.d(TAG, "checkPermissionForUri: REQUESTED URI" + uri.getPath());
         List<UriPermission> permissions = loadSavedDir();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             for (UriPermission permission : permissions) {
+                Log.d(TAG, "checkPermissionForUri: AVAILABL PERMISSIONS " + permission.getUri().getPath());
                 if (permission.getUri().equals(uri)) {
                     Log.d(TAG, "checkPermissionForUri: Permission Exist");
                     return true;

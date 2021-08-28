@@ -69,7 +69,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                 case "checkPermissionForUri":
                     Log.d(TAG, "onMethodCall: Checking Uri Permission");
                     final String checkPermissionForUri = arg.get("checkPermissionFor");
-                    result.success(docTree.checkPermissionForUri(Uri.parse(checkPermissionForUri)));
+                    result.success(docTree.checkPermissionForUri(checkPermissionForUri));
                     Log.d(TAG, "onMethodCall: permission requested " + Uri.parse(checkPermissionForUri).getPath());
                     for (UriPermission permission : docTree.loadSavedDir()) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

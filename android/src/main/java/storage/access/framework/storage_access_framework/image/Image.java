@@ -57,6 +57,8 @@ public class Image {
                             if (Objects.requireNonNull(file.getName()).contains(type)) {
                                 InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    Log.d(TAG, "getImages: Uri =====>" + file.getUri());
+                                    Log.d(TAG, "getImages: Path ====>" + file.getUri().getPath());
                                     images.add(Files.readAllBytes(Paths.get(URI.create(file.getUri().getPath()))));
                                 }
 //                                byte[] inputData = getBytes(iStream, file.length());

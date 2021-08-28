@@ -43,6 +43,7 @@ public class Image {
 
             }
         }
+        Log.d(TAG, "getImages: IMAGES LEN BEFOR SEND " + images.size());
         return images;
     }
 

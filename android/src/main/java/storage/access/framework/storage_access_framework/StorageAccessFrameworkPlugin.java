@@ -81,6 +81,10 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     final String path = arg.get("imagePath");
                     result.success(Image.getImages(path, activity));
                     break;
+                case "isDirExist":
+                    final String dirPath = arg.get("dirPath");
+                    result.success(docTree.ifDirExists(dirPath));
+                    break;
                 default:
                     result.notImplemented();
                     break;

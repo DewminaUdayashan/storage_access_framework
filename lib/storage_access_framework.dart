@@ -10,10 +10,15 @@ class StorageAccessFramework {
   static const String _openDocumentTree = 'openDocumentTree';
   static const String _checkPermissionForUri = 'checkPermissionForUri';
   static const String _getImages = 'getImages';
+  static const String _checkDir = 'isDirExist';
 
   static Future<int?> get platformVersion async {
     final int? version = await _channel.invokeMethod(_getPlatformVersion);
     return version;
+  }
+
+  static Future<bool> isDirectoryExists({required String directoryPath}) async {
+    return await _channel.invokeMethod(_checkDir);
   }
 
   static Future<Uri?> openDocumentTree({String? initialUri}) async {

@@ -10,6 +10,7 @@ import android.os.storage.StorageManager;
 import android.provider.DocumentsContract;
 import android.util.Log;
 
+import java.io.File;
 import java.util.List;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
@@ -96,6 +97,12 @@ public class DocTree {
                 }
             }
         return false;
+    }
+
+
+    public boolean ifDirExists(String uri) {
+        File dir = new File(uri);
+        return dir.exists();
     }
 
 }

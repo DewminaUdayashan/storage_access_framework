@@ -13,7 +13,9 @@ import androidx.documentfile.provider.DocumentFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +57,7 @@ public class Image {
                             if (Objects.requireNonNull(file.getName()).contains(type)) {
                                 InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    images.add(Files.readAllBytes(Paths.get(String.valueOf(file.getUri()))));
+                                    images.add(Files.readAllBytes(Paths.get(URI.create(file.getUri().getPath()))));
                                 }
 //                                byte[] inputData = getBytes(iStream, file.length());
 //                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
@@ -71,7 +73,7 @@ public class Image {
 //                        images.add(inputData);
 //                    }
                 } catch (Exception e) {
-                    Log.d(TAG, "getImages: Exception Occurred => " + e.getMessage());
+                    Log.d(TAG, "getImages: Exception Occurred => " + e);
                 }
 
             }

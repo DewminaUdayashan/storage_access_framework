@@ -104,7 +104,6 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     public void onAttachedToActivity(ActivityPluginBinding binding) {
         activity = binding.getActivity();
         docTree = new DocTree(activity);
-        Log.d(TAG, "onAttachedToActivity: ");
         binding.addActivityResultListener(this);
     }
 
@@ -112,7 +111,6 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     public void onDetachedFromActivityForConfigChanges() {
         activity = null;
         docTree.activity = null;
-        Log.d(TAG, "onDetachedFromActivityForConfigChanges: ");
     }
 
 
@@ -121,14 +119,12 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
         activity = binding.getActivity();
         docTree.activity = binding.getActivity();
         binding.addActivityResultListener(this);
-        Log.d(TAG, "onReattachedToActivityForConfigChanges: ");
     }
 
     @Override
     public void onDetachedFromActivity() {
         activity = null;
         docTree.activity = null;
-        Log.d(TAG, "onDetachedFromActivity: ");
     }
 
 
@@ -140,8 +136,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
             docTree.saveDir(data.getData());
             return true;
         } else if (requestCode == DocTree.REQUEST_PERMISSION_CODE && resultCode == Activity.RESULT_CANCELED) {
-            Log.d(TAG, "onActivityResult: CANCELLED CHOOSING");
-            result.success("dirNoChoosed");
+            result.success("dirNotSelected%#@%@");
             return true;
         }
         return false;

@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.FileUtils;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.documentfile.provider.DocumentFile;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -59,7 +61,7 @@ public class Image {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     Log.d(TAG, "getImages: Uri =====>" + file.getUri());
                                     Log.d(TAG, "getImages: Path ====>" + file.getUri().getPath());
-                                    images.add(Files.readAllBytes(Paths.get(URI.create(file.getUri().getPath()))));
+                                    images.add(FileUtils.readFileToByteArray(new File(file.getUri().getPath())));
                                 }
 //                                byte[] inputData = getBytes(iStream, file.length());
 //                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));

@@ -34,9 +34,10 @@ android {
 }
 
 dependencies {
-implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'commons-io:commons-io:2.6'
 }
 configurations {
     cleanedAnnotations
-    compile.exclude group: 'org.jetbrains' , module:'annotations'
+    compile.exclude group: 'org.jetbrains', module: 'annotations'
 }

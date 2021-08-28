@@ -7,11 +7,14 @@ import android.os.Build;
 import android.os.FileUtils;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.documentfile.provider.DocumentFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -37,20 +40,26 @@ public class Image {
                 try {
                     if (types.isEmpty()) {
                         Log.d(TAG, "getImages: FILE EXTENSIONS EMPTY");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            images.add(Files.readAllBytes(Paths.get(String.valueOf(file.getUri()))));
+                        }
 
-                        InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
-                        byte[] inputData = getBytes(iStream, file.length());
-                        Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
-                        images.add(inputData);
+//                        InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
+//                        byte[] inputData = getBytes(iStream, file.length());
+//                        Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
+//                        images.add(inputData);
 
                     } else {
                         for (String type : types) {
                             Log.d(TAG, "getImages: FILE EXTENSION => " + type);
                             if (Objects.requireNonNull(file.getName()).contains(type)) {
                                 InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
-                                byte[] inputData = getBytes(iStream, file.length());
-                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
-                                images.add(inputData);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    images.add(Files.readAllBytes(Paths.get(String.valueOf(file.getUri()))));
+                                }
+//                                byte[] inputData = getBytes(iStream, file.length());
+//                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
+//                                images.add(inputData);
                             }
                         }
                     }

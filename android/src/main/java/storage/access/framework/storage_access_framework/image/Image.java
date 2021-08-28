@@ -35,6 +35,7 @@ public class Image {
 
                 try {
                     if (types.isEmpty()) {
+                        Log.d(TAG, "getImages: FILE EXTENSIONS EMPTY");
                         InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                         byte[] inputData = getBytes(iStream);
                         Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));

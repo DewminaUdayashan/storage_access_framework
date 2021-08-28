@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
             ),
             TextButton(
               onPressed: () async {
-                await StorageAccessFramework.getImages(
+                await StorageAccessFramework.getFiles(
                   uri:
                       "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
                 ).then((value) {

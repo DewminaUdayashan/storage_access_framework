@@ -20,7 +20,7 @@ public class Image {
 
     final private static String TAG = "IMAGE FUNCTIONS";
 
-    public static List<byte[]> getImages(String uri, Activity context) {
+    public static List<byte[]> getImages(String uri, Activity context, ArrayList<String> types) {
         List<byte[]> images = new ArrayList<byte[]>();
         DocumentFile pickedDir = DocumentFile.fromTreeUri(context, Uri.parse(uri));
         if (pickedDir != null) {
@@ -29,14 +29,33 @@ public class Image {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                Arrays.sort(files, Comparator.comparingLong(DocumentFile::lastModified).reversed());
 //            }
+            List<String> arr = new ArrayList<String>();
+
             for (DocumentFile file : files) {
+
                 try {
-                    if (Objects.requireNonNull(file.getName()).contains(".jpg") || Objects.requireNonNull(file.getName()).contains(".png") || Objects.requireNonNull(file.getName()).contains(".jpeg")) {
+                    if (types.isEmpty()) {
                         InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                         byte[] inputData = getBytes(iStream);
                         Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
                         images.add(inputData);
+                    } else {
+                        for (String type : types) {
+                            if (Objects.requireNonNull(file.getName()).contains(type)) {
+                                InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
+                                byte[] inputData = getBytes(iStream);
+                                Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
+                                images.add(inputData);
+                            }
+                        }
                     }
+
+//                    if (Objects.requireNonNull(file.getName()).contains(".jpg") || Objects.requireNonNull(file.getName()).contains(".png") || Objects.requireNonNull(file.getName()).contains(".jpeg")) {
+//                        InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
+//                        byte[] inputData = getBytes(iStream);
+//                        Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
+//                        images.add(inputData);
+//                    }
                 } catch (Exception e) {
                     Log.d(TAG, "getImages: Exception Occurred => " + e.getMessage());
                 }

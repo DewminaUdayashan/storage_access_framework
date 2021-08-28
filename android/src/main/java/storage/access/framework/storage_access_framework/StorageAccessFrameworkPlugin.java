@@ -10,7 +10,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -51,7 +54,6 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 //            final String whatsApp4BUri = arg.get("wa4b");
 //            final String whatsAppDualUri = arg.get("waDual");
 //            final String whatsAppGBUri = arg.get("waGB");
-            final Map<String, String> arg = call.arguments();
 
             switch (call.method) {
                 case "getPlatformVersion":
@@ -59,6 +61,8 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     break;
                 case "openDocumentTree":
                     Log.d(TAG, "onMethodCall: OPEN DOC TREE CALLED");
+                    final Map<String, String> arg = call.arguments();
+
                     try {
                         final String openDocTreeInitialUri = arg.get("initialUri");
                         docTree.openDocTree(openDocTreeInitialUri);
@@ -68,7 +72,8 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     break;
                 case "checkPermissionForUri":
                     Log.d(TAG, "onMethodCall: Checking Uri Permission");
-                    final String checkPermissionForUri = arg.get("checkPermissionFor");
+                    final Map<String, String> arg1 = call.arguments();
+                    final String checkPermissionForUri = arg1.get("checkPermissionFor");
                     result.success(docTree.checkPermissionForUri(checkPermissionForUri));
                     Log.d(TAG, "onMethodCall: permission requested " + Uri.parse(checkPermissionForUri).getPath());
                     for (UriPermission permission : docTree.loadSavedDir()) {
@@ -78,11 +83,14 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     }
                     break;
                 case "getImages":
-                    final String path = arg.get("imagePath");
-                    result.success(Image.getImages(path, activity));
+                    final Map<String, ArrayList<String>> arg2 = call.arguments();
+                    final String path = Objects.requireNonNull(arg2.get("imagePath")).get(0);
+                    final ArrayList<String> types = arg2.get("fileExtensions");
+                    result.success(Image.getImages(path, activity,types));
                     break;
                 case "isDirExist":
-                    final String dirPath = arg.get("dirPath");
+                    final Map<String, String> arg3 = call.arguments();
+                    final String dirPath = arg3.get("dirPath");
                     result.success(docTree.ifDirExists(dirPath));
                     break;
                 default:

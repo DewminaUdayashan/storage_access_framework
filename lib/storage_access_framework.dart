@@ -43,13 +43,16 @@ class StorageAccessFramework {
     return uri;
   }
 
-  static Future<List<Uint8List>> getImages({required String uri}) async {
+  static Future<List<Uint8List>> getFiles(
+      {required String uri,
+      List<String> fileExtensions = const <String>[]}) async {
     List<Uint8List> list = List<Uint8List>.empty(growable: true);
     String url = '';
     url += 'content://com.android.externalstorage.documents/tree/';
     url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
     Map<String, dynamic> payload = <String, dynamic>{
-      'imagePath': url,
+      'imagePath': [url],
+      'fileExtensions': fileExtensions
     };
     final res = await _channel.invokeMethod(_getImages, payload);
     res.map((imgBytes) {

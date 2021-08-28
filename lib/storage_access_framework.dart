@@ -21,7 +21,7 @@ class StorageAccessFramework {
     Map<String, dynamic> payload = <String, dynamic>{
       'dirPath': directoryPath,
     };
-    return await _channel.invokeMethod(payload);
+    return await _channel.invokeMethod(_checkDir, payload);
   }
 
   static Future<Uri?> openDocumentTree({String? initialUri}) async {

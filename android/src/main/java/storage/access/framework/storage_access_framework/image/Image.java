@@ -1,8 +1,10 @@
 package storage.access.framework.storage_access_framework.image;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.FileUtils;
 import android.util.Log;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -29,23 +31,24 @@ public class Image {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                Arrays.sort(files, Comparator.comparingLong(DocumentFile::lastModified).reversed());
 //            }
-            List<String> arr = new ArrayList<String>();
 
             for (DocumentFile file : files) {
 
                 try {
                     if (types.isEmpty()) {
                         Log.d(TAG, "getImages: FILE EXTENSIONS EMPTY");
+
                         InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
-                        byte[] inputData = getBytes(iStream);
+                        byte[] inputData = getBytes(iStream, file.length());
                         Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
                         images.add(inputData);
+
                     } else {
                         for (String type : types) {
                             Log.d(TAG, "getImages: FILE EXTENSION => " + type);
                             if (Objects.requireNonNull(file.getName()).contains(type)) {
                                 InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
-                                byte[] inputData = getBytes(iStream);
+                                byte[] inputData = getBytes(iStream, file.length());
                                 Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
                                 images.add(inputData);
                             }
@@ -73,9 +76,12 @@ public class Image {
     static int len = 0;
 
 
-    private static byte[] getBytes(InputStream inputStream) throws IOException {
+    private static byte[] getBytes(InputStream inputStream, long length) throws IOException {
         byteBuffer.reset();
         len = 0;
+        bufferSize = 1024;
+        if (length > bufferSize)
+            bufferSize = (int) length;
         byte[] buffer = new byte[bufferSize];
         while ((len = inputStream.read(buffer)) != -1) {
             byteBuffer.write(buffer, 0, len);

@@ -86,7 +86,9 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     final Map<String, ArrayList<String>> arg2 = call.arguments();
                     final String path = Objects.requireNonNull(arg2.get("imagePath")).get(0);
                     final ArrayList<String> types = arg2.get("fileExtensions");
-                    result.success(Image.getImages(path, activity,types));
+                    if (types == null) Log.d(TAG, "onMethodCall: FILE EXTENSIONS NULL");
+                    Log.d(TAG, "onMethodCall: FILE EXTENSIONS LEN : " + types.size());
+                    result.success(Image.getImages(path, activity, types));
                     break;
                 case "isDirExist":
                     final Map<String, String> arg3 = call.arguments();

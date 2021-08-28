@@ -41,6 +41,7 @@ public class Image {
                         images.add(inputData);
                     } else {
                         for (String type : types) {
+                            Log.d(TAG, "getImages: FILE EXTENSION => " + type);
                             if (Objects.requireNonNull(file.getName()).contains(type)) {
                                 InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                                 byte[] inputData = getBytes(iStream);

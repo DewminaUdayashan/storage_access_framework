@@ -35,6 +35,7 @@ public class Image {
                     if (Objects.requireNonNull(file.getName()).contains(".jpg")) {
                         InputStream iStream = context.getContentResolver().openInputStream(file.getUri());
                         byte[] inputData = getBytes(iStream);
+                        Log.d(TAG, "getImages: IMAGE BYTES" + Arrays.toString(inputData));
                         images.add(inputData);
                     }
                 } catch (Exception e) {

@@ -11,6 +11,8 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
@@ -101,8 +103,8 @@ public class DocTree {
 
 
     public boolean ifDirExists(String uri) {
-        File dir = new File(uri);
-        return dir.exists();
+        Log.d(TAG, "ifDirExists: Checking Path => " + uri);
+        return new File(uri).exists();
     }
 
 }

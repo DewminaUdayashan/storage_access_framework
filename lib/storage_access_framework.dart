@@ -61,9 +61,10 @@ class StorageAccessFramework {
   }
 
   static Future<bool> isPermissionAvailableForUri({required String uri}) async {
-    String url = '';
-    url += 'content://com.android.externalstorage.documents/tree/';
-    url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
+    String url = '/tree/';
+    url += uri;
+    // url += 'content://com.android.externalstorage.documents/tree/';
+    // url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
 
     Map<String, dynamic> payload = <String, dynamic>{
       'checkPermissionFor': url,

@@ -95,6 +95,10 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     final String dirPath = arg3.get("dirPath");
                     result.success(docTree.ifDirExists(dirPath));
                     break;
+                case "scanMediaFiles":
+                    docTree.scanMediaFiles();
+                    result.success(true);
+                    break;
                 default:
                     result.notImplemented();
                     break;

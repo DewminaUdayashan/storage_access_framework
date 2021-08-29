@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation 'androidx.documentfile:documentfile:1.0.1'
-    implementation 'commons-io:commons-io:2.6'
 }
 configurations {
     cleanedAnnotations

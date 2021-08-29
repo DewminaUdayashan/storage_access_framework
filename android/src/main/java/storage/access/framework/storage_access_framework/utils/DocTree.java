@@ -109,4 +109,8 @@ public class DocTree {
         return new File(uri).exists();
     }
 
+    public void scanMediaFiles() {
+        activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE));
+    }
+
 }

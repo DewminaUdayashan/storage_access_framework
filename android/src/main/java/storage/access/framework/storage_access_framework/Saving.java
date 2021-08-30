@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -60,6 +61,9 @@ public class Saving {
                 fos.close();
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                        Uri.parse("file://" + Environment.getExternalStorageDirectory())));
             }
         }
     }

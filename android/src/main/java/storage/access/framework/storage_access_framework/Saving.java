@@ -27,9 +27,9 @@ import java.util.ArrayList;
 public class Saving {
     private final static String TAG = "SAVING FUNCTION => ";
 
-    public void save(Activity activity, ArrayList<byte[]> bytes, String mimeType) {
+    public boolean save(Activity activity, ArrayList<byte[]> bytes, String mimeType) {
         String extention;
-        boolean saved;
+        boolean saved = false;
         String name;
         final String IMAGES_FOLDER_NAME = "DewzStatus";
         OutputStream fos;
@@ -72,10 +72,13 @@ public class Saving {
 //                saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
                 fos.close();
+                saved = true;
             } catch (Exception e) {
+                saved = false;
                 e.printStackTrace();
             }
         }
+        return saved;
     }
 
 

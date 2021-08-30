@@ -101,9 +101,9 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     final ArrayList<byte[]> bytes = (ArrayList<byte[]>) arg4.get("bytes");
                     final String mimeType = Objects.requireNonNull(arg4.get("mimeType")).toString();
                     if (bytes != null) {
-                        saving.save(activity, bytes, mimeType);
-                        result.success(true);
+                        result.success(saving.save(activity, bytes, mimeType));
                     } else {
+                        result.success(false);
                         result.error("404", "DATA NOT FOUND", "Data not received");
                     }
                     break;

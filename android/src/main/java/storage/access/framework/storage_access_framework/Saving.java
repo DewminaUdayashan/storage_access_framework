@@ -27,12 +27,16 @@ import java.util.ArrayList;
 public class Saving {
     private final static String TAG = "SAVING FUNCTION => ";
 
-    public void save(Activity activity, ArrayList<byte[]> bytes) {
+    public void save(Activity activity, ArrayList<byte[]> bytes, String mimeType) {
+        String extention;
         boolean saved;
         String name;
         final String IMAGES_FOLDER_NAME = "DewzStatus";
         OutputStream fos;
+        if (mimeType.contains("image")) extention = ".jpg";
+        else extention = ".mp4";
         for (int i = 0; i < bytes.size(); i++) {
+
             name = String.valueOf(System.currentTimeMillis()) + i;
             byte[] aByte = bytes.get(i);
             try {
@@ -40,7 +44,7 @@ public class Saving {
                     ContentResolver resolver = activity.getContentResolver();
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
-                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);//"image/jpeg"
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
                     Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                     fos = resolver.openOutputStream(imageUri);
@@ -54,7 +58,7 @@ public class Saving {
                             Log.d(TAG, "save: DIR CREATED");
                         }
                     }
-                    File image = new File(imagesDir, name + ".jpg");
+                    File image = new File(imagesDir, name + extention);
                     fos = new FileOutputStream(image);
 
                     scanMedia(activity, image.getPath());

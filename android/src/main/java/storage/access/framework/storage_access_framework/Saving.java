@@ -19,47 +19,48 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Saving {
- private final static String TAG = "SAVING FUNCTION => "; 
+    private final static String TAG = "SAVING FUNCTION => ";
 
-    public  void save(Activity activity, byte[] bytes){
+    public void save(Activity activity, byte[] bytes) {
         boolean saved;
         String name = "namethis";
         final String IMAGES_FOLDER_NAME = "DewzStatus";
         OutputStream fos;
 
-     try{
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-             ContentResolver resolver = activity.getContentResolver();
-             ContentValues contentValues = new ContentValues();
-             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
-             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg");
-             contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
-             Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-             fos = resolver.openOutputStream(imageUri);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ContentResolver resolver = activity.getContentResolver();
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
+                Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                fos = resolver.openOutputStream(imageUri);
 
-         } else {
-             String imagesDir = Environment.getExternalStoragePublicDirectory(
-                     Environment.DIRECTORY_DCIM).toString() + File.separator + IMAGES_FOLDER_NAME;
+            } else {
+                String imagesDir = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DCIM).toString() + File.separator + IMAGES_FOLDER_NAME;
 
-             File file = new File(imagesDir);
+                File file = new File(imagesDir);
 
-             if (!file.exists()) {
-                 file.mkdir();
-             }
+                if (!file.exists()) {
+                    file.mkdir();
+                }
 
-             File image = new File(imagesDir, name + ".jpg");
-             fos = new FileOutputStream(image);
+                File image = new File(imagesDir, name + ".jpg");
+                fos = new FileOutputStream(image);
 
-         }
+            }
 
-         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-         saved = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-         fos.flush();
-         fos.close();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
 
-     }catch (Exception e){
-         e.printStackTrace();;
-     }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
+        }
     }
 
 }

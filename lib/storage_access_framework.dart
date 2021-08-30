@@ -21,6 +21,7 @@ class StorageAccessFramework {
     await _channel.invokeMethod(_saveMedia, payload);
   }
 
+
   static Future<void> scanMediaFiles() async {
     await _channel.invokeMethod(_scanMediaFiles);
   }

@@ -54,6 +54,10 @@ public class Saving {
                     }
                     File image = new File(imagesDir, name + ".jpg");
                     fos = new FileOutputStream(image);
+                    final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    final Uri contentUri = Uri.fromFile(image);
+                    scanIntent.setData(contentUri);
+                    activity.sendBroadcast(scanIntent);
                 }
                 Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
                 saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -61,9 +65,6 @@ public class Saving {
                 fos.close();
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-                        Uri.parse("file://" + Environment.getExternalStorageDirectory())));
             }
         }
     }

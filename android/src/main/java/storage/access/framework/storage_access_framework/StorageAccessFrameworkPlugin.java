@@ -101,7 +101,9 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     result.success(true);
                     break;
                 case "saveMedia":
-                    saving.save(activity);
+                    final Map<String, byte[]> arg4 = call.arguments();
+                    final byte[] bytes = arg4.get("bytes");
+                    saving.save(activity, bytes);
                     result.success(true);
                     break;
                 default:

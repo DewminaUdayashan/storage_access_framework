@@ -14,9 +14,9 @@ class StorageAccessFramework {
   static const String _scanMediaFiles = 'scanMediaFiles';
   static const String _saveMedia = 'saveMedia';
 
-  static Future<void> saveMedia({required Uint8List bytes}) async {
+  static Future<void> saveMedia({required List<Uint8List> bytesList}) async {
     Map<String, dynamic> payload = <String, dynamic>{
-      'bytes': bytes,
+      'bytes': bytesList,
     };
     await _channel.invokeMethod(_saveMedia, payload);
   }

@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -17,49 +18,48 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Time;
+import java.util.ArrayList;
 
 public class Saving {
     private final static String TAG = "SAVING FUNCTION => ";
 
-    public void save(Activity activity, byte[] bytes) {
+    public void save(Activity activity, ArrayList<byte[]> bytes) {
         boolean saved;
-        String name = "namethis";
+        String name = String.valueOf(System.currentTimeMillis());
         final String IMAGES_FOLDER_NAME = "DewzStatus";
         OutputStream fos;
+        for (byte[] aByte : bytes) {
 
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                ContentResolver resolver = activity.getContentResolver();
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
-                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
-                Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-                fos = resolver.openOutputStream(imageUri);
-
-            } else {
-                String imagesDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DCIM).toString() + File.separator + IMAGES_FOLDER_NAME;
-
-                File file = new File(imagesDir);
-
-                if (!file.exists()) {
-                    file.mkdir();
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ContentResolver resolver = activity.getContentResolver();
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
+                    Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                    fos = resolver.openOutputStream(imageUri);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
+                } else {
+                    String imagesDir = Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DCIM).toString() + File.separator + IMAGES_FOLDER_NAME;
+                    File file = new File(imagesDir);
+                    if (!file.exists()) {
+                        if (file.mkdir()) {
+                            Log.d(TAG, "save: DIR CREATED");
+                        }
+                    }
+                    File image = new File(imagesDir, name + ".jpg");
+                    fos = new FileOutputStream(image);
                 }
-
-                File image = new File(imagesDir, name + ".jpg");
-                fos = new FileOutputStream(image);
-
+                Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
+                saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            ;
         }
     }
 

@@ -101,10 +101,14 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     result.success(true);
                     break;
                 case "saveMedia":
-                    final Map<String, byte[]> arg4 = call.arguments();
-                    final byte[] bytes = arg4.get("bytes");
-                    saving.save(activity, bytes);
-                    result.success(true);
+                    final Map<String, ArrayList<byte[]>> arg4 = call.arguments();
+                    final ArrayList<byte[]> bytes = arg4.get("bytes");
+                    if (bytes != null) {
+                        saving.save(activity, bytes);
+                        result.success(true);
+                    } else {
+                        result.error("404", "DATA NOT FOUND", "Data not received");
+                    }
                     break;
                 default:
                     result.notImplemented();

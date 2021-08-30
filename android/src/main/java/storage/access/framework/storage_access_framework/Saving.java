@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -30,6 +32,7 @@ public class Saving {
         String name;
         final String IMAGES_FOLDER_NAME = "DewzStatus";
         OutputStream fos;
+        String[] mediaFiles = new String[bytes.size()];
         for (int i = 0; i < bytes.size(); i++) {
             name = String.valueOf(System.currentTimeMillis()) + i;
             byte[] aByte = bytes.get(i);
@@ -55,19 +58,32 @@ public class Saving {
                     File image = new File(imagesDir, name + ".jpg");
                     fos = new FileOutputStream(image);
                     //
-                    final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    final Uri contentUri = Uri.parse(imagesDir);
-                    scanIntent.setData(contentUri);
-                    activity.sendBroadcast(scanIntent);
+//                    final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                    final Uri contentUri = Uri.fromFile(image);
+//                    scanIntent.setData(contentUri);
+//                    activity.sendBroadcast(scanIntent);
+                    mediaFiles[i] = image.getPath();
                 }
+
                 Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
                 saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
+                scanMedia(activity, mediaFiles);
                 fos.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    private void scanMedia(Activity activity, String[] media) {
+        MediaScannerConnection.scanFile(activity, media, new String[]{"image/jpeg"}, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                Log.d(TAG, "onScanCompleted: Scanned Path : " + path);
+            }
+        });
     }
 
 }

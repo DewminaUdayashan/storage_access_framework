@@ -47,7 +47,11 @@ public class Saving {
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
                     contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);//"image/jpeg"
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
-                    Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                    Uri imageUri;
+                    if ((mimeType.contains("image")))
+                        imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                    else
+                        imageUri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
                     fos = resolver.openOutputStream(imageUri);
                 } else {
                     String imagesDir = Environment.getExternalStoragePublicDirectory(

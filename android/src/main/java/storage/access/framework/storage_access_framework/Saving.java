@@ -36,7 +36,8 @@ public class Saving {
         if (mimeType.contains("image")) extention = ".jpg";
         else extention = ".mp4";
         for (int i = 0; i < bytes.size(); i++) {
-
+            Log.d(TAG, "save: EXTENSION ==============> " + extention);
+            Log.d(TAG, "save: MIME TYPE ==============> " + mimeType);
             name = String.valueOf(System.currentTimeMillis()) + i;
             byte[] aByte = bytes.get(i);
             try {

@@ -37,6 +37,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     private Activity activity;
     private DocTree docTree;
     private Result result;
+    private Saving saving = new Saving();
     final private static String TAG = "SAF PLUGIN => ";
 
 
@@ -97,6 +98,10 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     break;
                 case "scanMediaFiles":
                     docTree.scanMediaFiles();
+                    result.success(true);
+                    break;
+                case "saveMedia":
+                    saving.save(activity);
                     result.success(true);
                     break;
                 default:

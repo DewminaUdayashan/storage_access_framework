@@ -48,7 +48,6 @@ public class Saving {
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
                     Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                     fos = resolver.openOutputStream(imageUri);
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
                 } else {
                     String imagesDir = Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DCIM).toString() + File.separator + IMAGES_FOLDER_NAME;
@@ -64,8 +63,8 @@ public class Saving {
                     scanMedia(activity, image.getPath());
                 }
 
-                Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
-                saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
+//                saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
                 fos.close();
             } catch (Exception e) {

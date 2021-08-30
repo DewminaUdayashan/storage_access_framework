@@ -12,6 +12,11 @@ class StorageAccessFramework {
   static const String _getImages = 'getImages';
   static const String _checkDir = 'isDirExist';
   static const String _scanMediaFiles = 'scanMediaFiles';
+  static const String _saveMedia = 'saveMedia';
+
+  static Future<void> saveMedia() async {
+    await _channel.invokeMethod(_saveMedia);
+  }
 
   static Future<void> scanMediaFiles() async {
     await _channel.invokeMethod(_scanMediaFiles);

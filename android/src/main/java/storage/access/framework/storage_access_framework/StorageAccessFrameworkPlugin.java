@@ -7,11 +7,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -22,12 +20,10 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry;
 import storage.access.framework.storage_access_framework.image.Image;
 import storage.access.framework.storage_access_framework.utils.DocTree;
-import storage.access.framework.storage_access_framework.utils.PlatformInfo;
 
-import static io.flutter.plugin.common.PluginRegistry.*;
+import static io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 
 /**
  * StorageAccessFrameworkPlugin
@@ -58,7 +54,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
 
             switch (call.method) {
                 case "getPlatformVersion":
-                    result.success(PlatformInfo.getPlatformVersion());
+                    result.success(Build.VERSION.SDK_INT);
                     break;
                 case "openDocumentTree":
                     Log.d(TAG, "onMethodCall: OPEN DOC TREE CALLED");

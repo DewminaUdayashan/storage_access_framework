@@ -26,11 +26,12 @@ public class Saving {
 
     public void save(Activity activity, ArrayList<byte[]> bytes) {
         boolean saved;
-        String name = String.valueOf(System.currentTimeMillis());
+        String name;
         final String IMAGES_FOLDER_NAME = "DewzStatus";
         OutputStream fos;
-        for (byte[] aByte : bytes) {
-
+        for (int i = 0; i < bytes.size(); i++) {
+            name = String.valueOf(System.currentTimeMillis()) + i;
+            byte[] aByte = bytes.get(i);
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     ContentResolver resolver = activity.getContentResolver();

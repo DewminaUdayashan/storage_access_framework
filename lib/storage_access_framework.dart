@@ -14,14 +14,14 @@ class StorageAccessFramework {
   static const String _scanMediaFiles = 'scanMediaFiles';
   static const String _saveMedia = 'saveMedia';
 
-  static Future<void> saveMedia({required List<Uint8List> bytesList, required mimeType}) async {
+  static Future<bool> saveMedia(
+      {required List<Uint8List> bytesList, required mimeType}) async {
     Map<String, dynamic> payload = <String, dynamic>{
       'bytes': bytesList,
-      'mimeType':mimeType,
+      'mimeType': mimeType,
     };
-    await _channel.invokeMethod(_saveMedia, payload);
+    return await _channel.invokeMethod(_saveMedia, payload);
   }
-
 
   static Future<void> scanMediaFiles() async {
     await _channel.invokeMethod(_scanMediaFiles);

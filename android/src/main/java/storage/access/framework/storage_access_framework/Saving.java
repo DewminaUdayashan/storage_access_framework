@@ -54,8 +54,9 @@ public class Saving {
                     }
                     File image = new File(imagesDir, name + ".jpg");
                     fos = new FileOutputStream(image);
+                    //
                     final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    final Uri contentUri = Uri.fromFile(image);
+                    final Uri contentUri = Uri.parse(imagesDir);
                     scanIntent.setData(contentUri);
                     activity.sendBroadcast(scanIntent);
                 }

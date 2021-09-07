@@ -64,7 +64,6 @@ public class Saving {
                     }
                     File image = new File(imagesDir, name + extention);
                     fos = new FileOutputStream(image);
-
                     scanMedia(activity, image.getPath());
                 }
                 fos.write(aByte);

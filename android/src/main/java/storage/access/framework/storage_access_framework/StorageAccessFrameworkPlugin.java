@@ -16,6 +16,7 @@ import java.util.Objects;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -30,6 +31,7 @@ import static io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
  */
 public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware, ActivityResultListener {
     private MethodChannel channel;
+    private EventChannel eventChannel;
     private Activity activity;
     private DocTree docTree;
     private Result result;
@@ -40,8 +42,11 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     @Override
     public void onAttachedToEngine(FlutterPluginBinding flutterPluginBinding) {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "storage_access_framework");
+        eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "storage_access_framework_event");
         channel.setMethodCallHandler(this);
+
     }
+
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
@@ -80,12 +85,48 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     }
                     break;
                 case "getImages":
-                    final Map<String, ArrayList<String>> arg2 = call.arguments();
-                    final String path = Objects.requireNonNull(arg2.get("imagePath")).get(0);
-                    final ArrayList<String> types = arg2.get("fileExtensions");
-                    if (types == null) Log.d(TAG, "onMethodCall: FILE EXTENSIONS NULL");
-                    Log.d(TAG, "onMethodCall: FILE EXTENSIONS LEN : " + types.size());
-                    result.success(Image.getImages(path, activity, types));
+
+                    eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
+                        @Override
+                        public void onListen(Object arguments, EventChannel.EventSink events) {
+                            final Map<String, ArrayList<String>> arg2 = call.arguments();
+                            final String path = Objects.requireNonNull(arg2.get("imagePath")).get(0);
+                            final ArrayList<String> types = arg2.get("fileExtensions");
+                            if (types == null) Log.d(TAG, "onMethodCall: FILE EXTENSIONS NULL");
+                            Log.d(TAG, "onMethodCall: FILE EXTENSIONS LEN : " + types.size());
+                            Image image = new Image();
+//                            result.success(Image.getImages(path, activity, types));
+                            image.getImages(path, activity, types, events);
+                        }
+
+                        @Override
+                        public void onCancel(Object arguments) {
+
+                        }
+                    });
+
+
+////
+////                    eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
+////                        @Override
+////                        public void onListen(Object arguments, EventChannel.EventSink events) {
+////                            final Map<String, ArrayList<String>> arg2 = call.arguments();
+////                            final String path = Objects.requireNonNull(arg2.get("imagePath")).get(0);
+////                            final ArrayList<String> types = arg2.get("fileExtensions");
+////                            if (types == null) Log.d(TAG, "onMethodCall: FILE EXTENSIONS NULL");
+////                            Log.d(TAG, "onMethodCall: FILE EXTENSIONS LEN : " + types.size());
+//////                            result.success(Image.getImages(path, activity, types));
+////                           Image.getImages(path, activity, types,events);
+////
+////                        }
+//
+//
+//                        @Override
+//                        public void onCancel(Object arguments) {
+//
+//                        }
+//                    });
+
                     break;
                 case "isDirExist":
                     final Map<String, String> arg3 = call.arguments();

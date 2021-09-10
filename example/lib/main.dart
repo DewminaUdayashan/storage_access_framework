@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -52,6 +53,9 @@ class _HomeState extends State<Home> {
     });
   }
 
+  bool loading = false;
+  List<Uint8List> l = <Uint8List>[];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -64,6 +68,25 @@ class _HomeState extends State<Home> {
           children: [
             Center(
               child: Text('Running on: $_platformVersion\n'),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: loading ? CircularProgressIndicator() : SizedBox.shrink(),
+            ),
+            Expanded(
+              child: SizedBox(
+                height: 200,
+                child: loading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: l.length,
+                        itemBuilder: (context, index) => Image.memory(l[index]),
+                      ),
+              ),
             ),
             TextButton(
               onPressed: () async {
@@ -113,17 +136,23 @@ class _HomeState extends State<Home> {
             ),
             TextButton(
               onPressed: () async {
-                await StorageAccessFramework.getFiles(
+                loading = true;
+                setState(() {});
+                StorageAccessFramework.getFileStream(
                   uri:
                       "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
-                ).then((value) {
-                  showDialog(
-                      context: context,
-                      builder: (c) => AlertDialog(
-                            title: Text("Images Loaded"),
-                            content: Text(value.length.toString()),
-                            actions: [],
-                          ));
+                  fileExtensions: [
+                    '.jpg',
+                    '.jpeg',
+                    '.png',
+                  ],
+                ).listen((event) {
+                  print(event);
+                  if (event.toString().contains("end")) {
+                    loading = false;
+                    setState(() {});
+                  } else
+                    l.add(Uint8List.fromList(event));
                 });
               },
               style: TextButton.styleFrom(
@@ -139,4 +168,16 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+}
+
+Future<List> tst(int? sd) async {
+  final List list = await StorageAccessFramework.getFiles(
+    uri: "primary:Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
+    fileExtensions: [
+      '.jpg',
+      '.jpeg',
+      '.png',
+    ],
+  );
+  return list;
 }

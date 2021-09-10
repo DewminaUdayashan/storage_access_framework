@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class StorageAccessFramework {
   static const MethodChannel _channel =
-      const MethodChannel('storage_access_framework');
+      MethodChannel('storage_access_framework');
+  static const EventChannel _eventChannel =
+      EventChannel('storage_access_framework_event');
   static const String _getPlatformVersion = 'getPlatformVersion';
   static const String _openDocumentTree = 'openDocumentTree';
   static const String _checkPermissionForUri = 'checkPermissionForUri';
@@ -13,6 +16,19 @@ class StorageAccessFramework {
   static const String _checkDir = 'isDirExist';
   static const String _scanMediaFiles = 'scanMediaFiles';
   static const String _saveMedia = 'saveMedia';
+
+  static Stream getFileStream(
+      {required String uri, List<String> fileExtensions = const <String>[]}) {
+    String url = '';
+    url += 'content://com.android.externalstorage.documents/tree/';
+    url += uri.replaceAll(':', '%3A').replaceAll('/', '%2F');
+    Map<String, dynamic> payload = <String, dynamic>{
+      'imagePath': [url],
+      'fileExtensions': fileExtensions
+    };
+    _channel.invokeMethod(_getImages, payload);
+    return _eventChannel.receiveBroadcastStream();
+  }
 
   static Future<bool> saveMedia(
       {required List<Uint8List> bytesList, required mimeType}) async {

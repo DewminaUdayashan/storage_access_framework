@@ -85,7 +85,6 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
                     }
                     break;
                 case "getImages":
-
                     eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
                         @Override
                         public void onListen(Object arguments, EventChannel.EventSink events) {

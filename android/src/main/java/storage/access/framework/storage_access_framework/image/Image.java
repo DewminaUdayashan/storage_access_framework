@@ -115,6 +115,7 @@ public class Image {
                     @Override
                     public void run() {
                         events.success("end");
+                        events.endOfStream();
                     }
                 });
             }

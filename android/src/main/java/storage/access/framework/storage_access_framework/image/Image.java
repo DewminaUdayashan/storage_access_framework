@@ -29,7 +29,7 @@ import java.util.Objects;
 import io.flutter.plugin.common.EventChannel;
 
 public class Image {
-
+    final private String END_CODE = "END_STREAM_@#sX@#101_DEWZ@SAF";
     final private static String TAG = "IMAGE FUNCTIONS";
     final private Handler mainHandler = new Handler();
 
@@ -114,7 +114,7 @@ public class Image {
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        events.success("end");
+                        events.success(END_CODE);
                         events.endOfStream();
                     }
                 });

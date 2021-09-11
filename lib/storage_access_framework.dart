@@ -16,6 +16,7 @@ class StorageAccessFramework {
   static const String _checkDir = 'isDirExist';
   static const String _scanMediaFiles = 'scanMediaFiles';
   static const String _saveMedia = 'saveMedia';
+  static const endCode = "END_STREAM_@#sX@#101_DEWZ@SAF";
 
   static Stream getFileStream(
       {required String uri, List<String> fileExtensions = const <String>[]}) {

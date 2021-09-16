@@ -1,21 +1,15 @@
 package storage.access.framework.storage_access_framework.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.UriPermission;
 import android.net.Uri;
 import android.os.Build;
-import android.os.storage.StorageManager;
 import android.provider.DocumentsContract;
 import android.util.Log;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-
-import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 public class DocTree {
     final public static int REQUEST_PERMISSION_CODE = 11111;
@@ -23,7 +17,6 @@ public class DocTree {
     public Activity activity;
 
     public DocTree(Activity activity) {
-        Log.d(TAG, "DocTree: DOC TREE INSTANT CREATED ====================");
         this.activity = activity;
     }
 

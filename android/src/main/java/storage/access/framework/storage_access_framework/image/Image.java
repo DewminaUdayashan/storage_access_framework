@@ -1,28 +1,17 @@
 package storage.access.framework.storage_access_framework.image;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.documentfile.provider.DocumentFile;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,7 +29,6 @@ public class Image {
 
 
     class BackgroundProcess implements Runnable {
-
         String uri;
         Activity context;
         ArrayList<String> types;
@@ -56,19 +44,16 @@ public class Image {
 
         @Override
         public void run() {
-            List<byte[]> images = new ArrayList<byte[]>();
+            List<byte[]> images = new ArrayList<>();
             DocumentFile pickedDir = DocumentFile.fromTreeUri(context, Uri.parse(uri));
             if (pickedDir != null) {
                 DocumentFile[] files = pickedDir.listFiles();
-                Log.d(TAG, "getImages: IMAGES LEN " + files.length);
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                Arrays.sort(files, Comparator.comparingLong(DocumentFile::lastModified).reversed());
 //            }
-
                 for (DocumentFile file : files) {
                     try {
                         InputStream inputStream = context.getContentResolver().openInputStream(file.getUri());
-
                         if (types.isEmpty()) {
                             BufferedInputStream bis = new BufferedInputStream(inputStream);
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();

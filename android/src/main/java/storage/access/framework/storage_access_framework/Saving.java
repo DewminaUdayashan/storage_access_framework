@@ -3,25 +3,16 @@ package storage.access.framework.storage_access_framework;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class Saving {
@@ -31,13 +22,13 @@ public class Saving {
         String extention;
         boolean saved = false;
         String name;
-        final String IMAGES_FOLDER_NAME = "DewzStatus";
+        final String IMAGES_FOLDER_NAME = "WhatsStatus";
         OutputStream fos;
         if (mimeType.contains("image")) extention = ".jpg";
         else extention = ".mp4";
         for (int i = 0; i < bytes.size(); i++) {
-            Log.d(TAG, "save: EXTENSION ==============> " + extention);
-            Log.d(TAG, "save: MIME TYPE ==============> " + mimeType);
+//            Log.d(TAG, "save: EXTENSION ==============> " + extention);
+//            Log.d(TAG, "save: MIME TYPE ==============> " + mimeType);
             name = String.valueOf(System.currentTimeMillis()) + i;
             byte[] aByte = bytes.get(i);
             try {
@@ -67,8 +58,6 @@ public class Saving {
                     scanMedia(activity, image.getPath());
                 }
                 fos.write(aByte);
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(aByte, 0, aByte.length);
-//                saved = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
                 fos.close();
                 saved = true;

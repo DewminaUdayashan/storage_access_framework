@@ -33,7 +33,7 @@ public class StorageAccessFrameworkPlugin implements FlutterPlugin, MethodCallHa
     private Activity activity;
     private DocTree docTree;
     private Result result;
-    private Saving saving = new Saving();
+    final private Saving saving = new Saving();
     final private static String TAG = "SAF PLUGIN => ";
 
 

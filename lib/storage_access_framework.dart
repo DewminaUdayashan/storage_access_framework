@@ -14,6 +14,7 @@ class StorageAccessFramework {
   static const String _scanMediaFiles = 'scanMediaFiles';
   static const String _saveMedia = 'saveMedia';
 
+
   static Future<bool> saveMedia(
       {required List<Uint8List> bytesList, required mimeType}) async {
     Map<String, dynamic> payload = <String, dynamic>{

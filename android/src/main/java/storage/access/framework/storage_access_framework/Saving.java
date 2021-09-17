@@ -22,7 +22,7 @@ public class Saving {
         String extention;
         boolean saved = false;
         String name;
-        final String IMAGES_FOLDER_NAME = "WhatsStatus";
+        final String IMAGES_FOLDER_NAME = "DCIM/WhatsStatus";
         OutputStream fos;
         if (mimeType.contains("image")) extention = ".jpg";
         else extention = ".mp4";
@@ -37,7 +37,7 @@ public class Saving {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
                     contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);//"image/jpeg"
-                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/" + IMAGES_FOLDER_NAME);
+                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, IMAGES_FOLDER_NAME);
                     Uri imageUri;
                     if ((mimeType.contains("image")))
                         imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
